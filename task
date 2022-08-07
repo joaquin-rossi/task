@@ -1,0 +1,27 @@
+#!/bin/bash
+function help {
+	echo "task <task> <args>"
+	echo "Tasks:"
+	compgen -A function | cat -n
+}
+
+TASKROOT="."
+while [ "$#" -gt 0 ]; do
+	case "$1" in
+		--root=*) TASKROOT="${1#*=}"; shift 1;;
+
+		--) shift 1; break;;
+		-*) echo "task: unknown option: $1" >&2; exit 1;;
+		*) break;;
+	esac
+done
+
+TASKFILE="${TASKROOT}/Taskfile"
+if [ ! -f "$TASKFILE" ]; then
+	echo "task: no Taskfile found"
+	exit 1
+fi
+
+. "$TASKFILE" && \
+	cd "$TASKROOT" && \
+	"${@:-help}"
