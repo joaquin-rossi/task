@@ -2,7 +2,7 @@
 function help {
 	echo "task <task> <args>"
 	echo "Tasks:"
-	compgen -A function | cat -n
+	compgen -A function | grep -v '^_' | cat -n
 }
 
 TASKROOT="."
